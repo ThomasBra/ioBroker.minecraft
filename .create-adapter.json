@@ -1,8 +1,8 @@
 {
 	"cli": true,
 	"target": "directory",
-	"adapterName": "template",
-	"description": "Template for adapter development",
+	"adapterName": "minecraft",
+	"description": "minecraft for adapter development",
 	"authorName": "Author",
 	"authorGithub": "Author",
 	"authorEmail": "author@mail.com",
@@ -26,7 +26,7 @@
 	"adminReact": "no",
 	"tabReact": "no",
 	"language": "TypeScript",
-	"title": "Template (TypeScript)",
+	"title": "minecraft (TypeScript)",
 	"tools": [
 		"ESLint",
 		"code coverage"
