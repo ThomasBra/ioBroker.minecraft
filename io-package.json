@@ -1,6 +1,6 @@
 {
 	"common": {
-		"name": "Minecraft",
+		"name": "minecraft",
 		"version": "0.0.1",
 		"news": {
 			"0.0.1": {
@@ -19,15 +19,15 @@
 		"title": "Minecraft",
 		"titleLang": {
 			"en": "Minecraft server status",
-			"de": "Vorlage (TypeScript)",
-			"ru": "Шаблон (TypeScript)",
-			"pt": "Modelo (TypeScript)",
-			"nl": "Sjabloon (TypeScript)",
-			"fr": "Modèle (TypeScript)",
-			"it": "Modello (dattiloscritto)",
-			"es": "Plantilla (TypeScript)",
-			"pl": "Szablon (TypeScript)",
-			"zh-cn": "模板（打字稿）"
+			"de": "Minecraft Server Status",
+			"ru": "",
+			"pt": "",
+			"nl": "",
+			"fr": "",
+			"it": "",
+			"es": "",
+			"pl": "",
+			"zh-cn": ""
 		},
 		"desc": {
 			"en": "Minecraft server status monitoring",
