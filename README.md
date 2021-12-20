@@ -27,7 +27,7 @@ Configure hostaddress (server:port) at the instance settings.
 	### **WORK IN PROGRESS**
 -->
 
-### **WORK IN PROGRESS**
+### 0.0.1
 * (ThomasBra) initial release
 
 ## License
