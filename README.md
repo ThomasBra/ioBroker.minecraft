@@ -27,6 +27,9 @@ Configure hostaddress (server:port) at the instance settings.
 	### **WORK IN PROGRESS**
 -->
 
+### **WORK IN PROGRESS**
+* (ThomasBra) Open test phase - please give me feedback here as a issue
+
 ### 0.0.1
 * (ThomasBra) initial release
 
