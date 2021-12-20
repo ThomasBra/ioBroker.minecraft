@@ -30,21 +30,23 @@ class minecraft extends utils.Adapter {
 	private async onReady(): Promise<void> {
 		this.log.info("config host: " + this.config.host);
 
-		let hostSplit: string[] = this.config.host.split(":");
+		let hostSplit: string[] = this.config.host?.split(":");
 		let server: string;
 		let port: number = 25565;
 
-		server = hostSplit[0];
-		if (hostSplit.length > 1) {
-			port = Number.parseInt(hostSplit[1]);
-		}
+		if (hostSplit) {
+			server = hostSplit[0];
+			if (hostSplit.length > 1) {
+				port = Number.parseInt(hostSplit[1]);
+			}
 
-		let call: Promise<any> = MinecraftServerListPing.ping(4, server, port, 3000);
-		call.then(response => {
-			this.log.info(JSON.stringify(response));
-		}).catch(err => {
-			this.log.error(err);
-		});
+			let call: Promise<any> = MinecraftServerListPing.ping(4, server, port, 3000);
+			call.then(response => {
+				this.log.info(JSON.stringify(response));
+			}).catch(err => {
+				this.log.error(err);
+			});
+		}
 
 
 		/*await this.setObjectNotExistsAsync("testVariable", {
