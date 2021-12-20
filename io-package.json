@@ -93,6 +93,50 @@
 	"objects": [],
 	"instanceObjects": [
 		{
+			"_id": "info",
+			"type": "channel",
+			"common": {
+				"name": "infos"
+			},
+			"native": {}
+		},
+		{
+			"_id": "info.server",
+			"type": "state",
+			"common": {
+				"name": "server",
+				"role": "state",
+				"type": "string",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "info.port",
+			"type": "state",
+			"common": {
+				"name": "port",
+				"role": "state",
+				"type": "number",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "info.online",
+			"type": "state",
+			"common": {
+				"name": "connection possible",
+				"role": "state",
+				"type": "boolean",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
 			"_id": "players",
 			"type": "channel",
 			"common": {
@@ -128,7 +172,7 @@
 			"_id": "players.names",
 			"type": "state",
 			"common": {
-				"name": "player names seperated by ','",
+				"name": "player names",
 				"role": "state",
 				"type": "string",
 				"read": true,

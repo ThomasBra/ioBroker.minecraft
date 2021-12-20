@@ -1,26 +1,20 @@
 /*
  * Created with @iobroker/create-adapter v2.0.1
  */
-
-// The adapter-core module gives you access to the core ioBroker functions
-// you need to create an adapter
 import * as utils from "@iobroker/adapter-core";
 import * as mcs from "minecraft-status";
-//const MinecraftServerListPing = require("minecraft-status");
 
-// Load your modules here, e.g.:
-// import * as fs from "fs";
-
+let timer: ioBroker.Interval;
 class minecraft extends utils.Adapter {
 	server = "";
 	port = 25565;
-	timer: ioBroker.Interval = this.setInterval(this.syncState, 60000);
 
 	public constructor(options: Partial<utils.AdapterOptions> = {}) {
 		super({
 			...options,
 			name: "minecraft",
 		});
+
 		this.on("ready", this.onReady.bind(this));
 		this.on("stateChange", this.onStateChange.bind(this));
 		// this.on("objectChange", this.onObjectChange.bind(this));
@@ -36,67 +30,44 @@ class minecraft extends utils.Adapter {
 		this.log.info("config host: " + this.config.host);
 
 		const hostSplit: string[] = this.config.host?.split(":");
-
+		this.log.info(JSON.stringify(hostSplit));
 		if (hostSplit) {
 			this.server = hostSplit[0];
 			if (hostSplit.length > 1) {
 				this.port = Number.parseInt(hostSplit[1]);
 			}
+
+			this.log.info("config server: " + this.server + " port: " + this.port);
 		}
 
-		/*await this.setObjectNotExistsAsync("testVariable", {
-			type: "state",
-			common: {
-				name: "testVariable",
-				type: "boolean",
-				role: "indicator",
-				read: true,
-				write: true,
-			},
-			native: {},
-		});*/
-
-		//this.subscribeStates("testVariable");
-
-		/*
-			setState examples
-			you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-		*/
-		// the variable testVariable is set to true as command (ack=false)
-		//await this.setStateAsync("testVariable", true);
-
-		// same thing, but the value is flagged "ack"
-		// ack should be always set to true if the value is received from or acknowledged from the target system
-		//await this.setStateAsync("testVariable", { val: true, ack: true });
-
-		// same thing, but the state is deleted after 30s (getState will return null afterwards)
-		//await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
-
-		// examples for the checkPassword/checkGroup functions
-		//let result = await this.checkPasswordAsync("admin", "iobroker");
-		//this.log.info("check user admin pw iobroker: " + result);
-
-		//result = await this.checkGroupAsync("admin", "admin");
-		//this.log.info("check group user admin group admin: " + result);
+		timer = this.setInterval(() => this.syncState(), 30000);
+		this.syncState();
 	}
 
 	private syncState(): string {
+		this.setStateAsync("info.server", { val: this.server, ack: true });
+		this.setStateAsync("info.port", { val: this.port, ack: true });
 		if (this.server && this.port) {
 			const call: Promise<any> = mcs.MinecraftServerListPing.ping(4, this.server, this.port, 3000);
 			call.then(response => {
 				this.log.debug(JSON.stringify(response));
 
-				this.setStateAsync("description.text", { val: response.description.text, ack: true });
-				const extras: any[] = response.description.extra;
-				this.setStateAsync("description.extra", { val: extras.map(extra => extra.text).join(" "), ack: true });
-				this.setStateAsync("players.max", { val: response.players.max, ack: true });
-				this.setStateAsync("players.online", { val: response.players.online, ack: true });
-				const samples: any[] = response.players.sample;
-				this.setStateAsync("players.names", { val: samples.map(sample => sample.name).join(","), ack: true });
-				this.setStateAsync("version.name", { val: response.version.name, ack: true });
-				this.setStateAsync("version.protocol", { val: response.version.protocol, ack: true });
+				this.setStateAsync("description.text", { val: response.description?.text, ack: true });
+				const extras: any[] = response.description?.extra;
+				this.setStateAsync("description.extra", { val: extras?.map(extra => extra.text).join(" "), ack: true });
+				this.setStateAsync("players.max", { val: response.players?.max, ack: true });
+				this.setStateAsync("players.online", { val: response.players?.online, ack: true });
+				const samples: any[] = response.players?.sample;
+				let names = JSON.stringify(samples?.map(sample => sample.name));
+				if (!names)
+					names = "[]";
+				this.setStateAsync("players.names", { val: names, ack: true });
+				this.setStateAsync("version.name", { val: response.version?.name, ack: true });
+				this.setStateAsync("version.protocol", { val: response.version?.protocol, ack: true });
+				this.setStateAsync("info.online", { val: true, ack: true });
 			}).catch(err => {
-				this.log.error(err);
+				this.setStateAsync("info.online", { val: false, ack: true });
+				this.log.debug(err);
 			});
 		}
 		return "runing";
@@ -108,7 +79,8 @@ class minecraft extends utils.Adapter {
 	private onUnload(callback: () => void): void {
 		try {
 			// clearTimeout(timeout1);
-			clearInterval(this.timer);
+			this.log.info("unload minecraft adapter");
+			this.clearInterval(timer);
 
 			callback();
 		} catch (e) {

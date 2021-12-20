@@ -19,6 +19,8 @@ Monitors the minecraft server status of a configured host.
 
 Configure hostaddress (server:port) at the instance settings.
 
+![Logo](admin/cfg.png)
+
 ## Changelog
 <!--
 	Placeholder for the next version (at the beginning of the line):
