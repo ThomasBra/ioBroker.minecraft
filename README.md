@@ -26,8 +26,7 @@ Configure hostaddress (server:port) at the instance settings.
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 0.0.2 (2021-12-20)
 * (ThomasBra) Open test phase - please give me feedback here as a issue
 
 ### 0.0.1
