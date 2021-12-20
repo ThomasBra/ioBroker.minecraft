@@ -93,46 +93,110 @@
 	"objects": [],
 	"instanceObjects": [
 		{
-			"_id": "info",
+			"_id": "players",
 			"type": "channel",
 			"common": {
-				"name": "Information"
+				"name": "players"
 			},
 			"native": {}
 		},
 		{
-			"_id": "channel",
-			"type": "channel",
-			"common": {
-				"name": "TV channel"
-			},
-			"native": {}
-		},
-		{
-			"_id": "appControl",
-			"type": "folder",
-			"common": {
-				"name": "App Steuerung"
-			},
-			"native": {}
-		},
-		{
-			"_id": "appControl.app",
-			"type": "channel",
-			"common": {
-				"name": "Applications"
-			},
-			"native": {}
-		},
-		{
-			"_id": "appControl.terminateApps",
+			"_id": "players.max",
 			"type": "state",
 			"common": {
-				"name": "Terminate Applications",
-				"role": "button",
-				"type": "boolean",
-				"read": false,
-				"write": true
+				"name": "maximum count",
+				"role": "state",
+				"type": "number",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "players.online",
+			"type": "state",
+			"common": {
+				"name": "online count",
+				"role": "state",
+				"type": "number",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "players.names",
+			"type": "state",
+			"common": {
+				"name": "player names seperated by ','",
+				"role": "state",
+				"type": "string",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "version",
+			"type": "channel",
+			"common": {
+				"name": "version"
+			},
+			"native": {}
+		},
+		{
+			"_id": "version.name",
+			"type": "state",
+			"common": {
+				"name": "installed version",
+				"role": "state",
+				"type": "string",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "version.protocol",
+			"type": "state",
+			"common": {
+				"name": "protocol version",
+				"role": "state",
+				"type": "number",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "description",
+			"type": "channel",
+			"common": {
+				"name": "description"
+			},
+			"native": {}
+		},
+		{
+			"_id": "description.text",
+			"type": "state",
+			"common": {
+				"name": "description",
+				"role": "state",
+				"type": "number",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "description.extra",
+			"type": "state",
+			"common": {
+				"name": "extra description",
+				"role": "state",
+				"type": "string",
+				"read": true,
+				"write": false
 			},
 			"native": {}
 		}

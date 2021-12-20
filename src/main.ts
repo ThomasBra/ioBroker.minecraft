@@ -12,6 +12,9 @@ import * as mcs from "minecraft-status";
 // import * as fs from "fs";
 
 class minecraft extends utils.Adapter {
+	server = "";
+	port = 25565;
+	timer: ioBroker.Interval = this.setInterval(this.syncState, 60000);
 
 	public constructor(options: Partial<utils.AdapterOptions> = {}) {
 		super({
@@ -25,6 +28,7 @@ class minecraft extends utils.Adapter {
 		this.on("unload", this.onUnload.bind(this));
 	}
 
+
 	/**
 	 * Is called when databases are connected and adapter received configuration.
 	 */
@@ -32,22 +36,13 @@ class minecraft extends utils.Adapter {
 		this.log.info("config host: " + this.config.host);
 
 		const hostSplit: string[] = this.config.host?.split(":");
-		let server: string;
-		let port = 25565;
 
 		if (hostSplit) {
-			server = hostSplit[0];
+			this.server = hostSplit[0];
 			if (hostSplit.length > 1) {
-				port = Number.parseInt(hostSplit[1]);
+				this.port = Number.parseInt(hostSplit[1]);
 			}
-			const call: Promise<any> = mcs.MinecraftServerListPing.ping(4, server, port, 3000);
-			call.then(response => {
-				this.log.info(JSON.stringify(response));
-			}).catch(err => {
-				this.log.error(err);
-			});
 		}
-
 
 		/*await this.setObjectNotExistsAsync("testVariable", {
 			type: "state",
@@ -85,13 +80,35 @@ class minecraft extends utils.Adapter {
 		//this.log.info("check group user admin group admin: " + result);
 	}
 
+	private syncState(): string {
+		if (this.server && this.port) {
+			const call: Promise<any> = mcs.MinecraftServerListPing.ping(4, this.server, this.port, 3000);
+			call.then(response => {
+				this.log.debug(JSON.stringify(response));
+
+				this.setStateAsync("description.text", { val: response.description.text, ack: true });
+				const extras: any[] = response.description.extra;
+				this.setStateAsync("description.extra", { val: extras.map(extra => extra.text).join(" "), ack: true });
+				this.setStateAsync("players.max", { val: response.players.max, ack: true });
+				this.setStateAsync("players.online", { val: response.players.online, ack: true });
+				const samples: any[] = response.players.sample;
+				this.setStateAsync("players.names", { val: samples.map(sample => sample.name).join(","), ack: true });
+				this.setStateAsync("version.name", { val: response.version.name, ack: true });
+				this.setStateAsync("version.protocol", { val: response.version.protocol, ack: true });
+			}).catch(err => {
+				this.log.error(err);
+			});
+		}
+		return "runing";
+	}
+
 	/**
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
 	 */
 	private onUnload(callback: () => void): void {
 		try {
 			// clearTimeout(timeout1);
-			// clearInterval(interval1);
+			clearInterval(this.timer);
 
 			callback();
 		} catch (e) {

@@ -35,6 +35,9 @@ class minecraft extends utils.Adapter {
             ...options,
             name: "minecraft",
         });
+        this.server = "";
+        this.port = 25565;
+        this.timer = this.setInterval(this.syncState, 60000);
         this.on("ready", this.onReady.bind(this));
         this.on("stateChange", this.onStateChange.bind(this));
         // this.on("objectChange", this.onObjectChange.bind(this));
@@ -48,19 +51,11 @@ class minecraft extends utils.Adapter {
         var _a;
         this.log.info("config host: " + this.config.host);
         const hostSplit = (_a = this.config.host) === null || _a === void 0 ? void 0 : _a.split(":");
-        let server;
-        let port = 25565;
         if (hostSplit) {
-            server = hostSplit[0];
+            this.server = hostSplit[0];
             if (hostSplit.length > 1) {
-                port = Number.parseInt(hostSplit[1]);
+                this.port = Number.parseInt(hostSplit[1]);
             }
-            const call = mcs.MinecraftServerListPing.ping(4, server, port, 3000);
-            call.then(response => {
-                this.log.info(JSON.stringify(response));
-            }).catch(err => {
-                this.log.error(err);
-            });
         }
         /*await this.setObjectNotExistsAsync("testVariable", {
             type: "state",
@@ -91,13 +86,33 @@ class minecraft extends utils.Adapter {
         //result = await this.checkGroupAsync("admin", "admin");
         //this.log.info("check group user admin group admin: " + result);
     }
+    syncState() {
+        if (this.server && this.port) {
+            const call = mcs.MinecraftServerListPing.ping(4, this.server, this.port, 3000);
+            call.then(response => {
+                this.log.debug(JSON.stringify(response));
+                this.setStateAsync("description.text", { val: response.description.text, ack: true });
+                const extras = response.description.extra;
+                this.setStateAsync("description.extra", { val: extras.map(extra => extra.text).join(" "), ack: true });
+                this.setStateAsync("players.max", { val: response.players.max, ack: true });
+                this.setStateAsync("players.online", { val: response.players.online, ack: true });
+                const samples = response.players.sample;
+                this.setStateAsync("players.names", { val: samples.map(sample => sample.name).join(","), ack: true });
+                this.setStateAsync("version.name", { val: response.version.name, ack: true });
+                this.setStateAsync("version.protocol", { val: response.version.protocol, ack: true });
+            }).catch(err => {
+                this.log.error(err);
+            });
+        }
+        return "runing";
+    }
     /**
      * Is called when adapter shuts down - callback has to be called under any circumstances!
      */
     onUnload(callback) {
         try {
             // clearTimeout(timeout1);
-            // clearInterval(interval1);
+            clearInterval(this.timer);
             callback();
         }
         catch (e) {
