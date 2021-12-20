@@ -5,7 +5,7 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 import * as utils from "@iobroker/adapter-core";
-import * as MinecraftServerListPing from "minecraft-status";
+import * as mcs from "minecraft-status";
 //const MinecraftServerListPing = require("minecraft-status");
 
 // Load your modules here, e.g.:
@@ -40,7 +40,7 @@ class minecraft extends utils.Adapter {
 			if (hostSplit.length > 1) {
 				port = Number.parseInt(hostSplit[1]);
 			}
-			const call: Promise<any> = MinecraftServerListPing.ping(4, server, port, 3000);
+			const call: Promise<any> = mcs.MinecraftServerListPing.ping(4, server, port, 3000);
 			call.then(response => {
 				this.log.info(JSON.stringify(response));
 			}).catch(err => {

@@ -25,7 +25,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = __importStar(require("@iobroker/adapter-core"));
-const MinecraftServerListPing = __importStar(require("minecraft-status"));
+const mcs = __importStar(require("minecraft-status"));
 //const MinecraftServerListPing = require("minecraft-status");
 // Load your modules here, e.g.:
 // import * as fs from "fs";
@@ -55,7 +55,7 @@ class minecraft extends utils.Adapter {
             if (hostSplit.length > 1) {
                 port = Number.parseInt(hostSplit[1]);
             }
-            const call = MinecraftServerListPing.ping(4, server, port, 3000);
+            const call = mcs.MinecraftServerListPing.ping(4, server, port, 3000);
             call.then(response => {
                 this.log.info(JSON.stringify(response));
             }).catch(err => {

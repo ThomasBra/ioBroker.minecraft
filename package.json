@@ -72,7 +72,8 @@
     "check": "tsc --noEmit",
     "coverage": "nyc npm run test:ts",
     "lint": "eslint --ext .ts src/",
-    "release": "release-script"
+    "release": "release-script",
+    "chk": "npm run build && npm run lint && npm run test"
   },
   "nyc": {
     "include": [
