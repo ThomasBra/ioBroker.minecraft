@@ -35,7 +35,7 @@ Configure hostaddress (server:port) at the instance settings.
 ## License
 MIT License
 
-Copyright (c) 2021 Author <t.braune@gmail.com>
+Copyright (c) 2021 Thomas Braune <t.braune@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

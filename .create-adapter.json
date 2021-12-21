@@ -3,9 +3,9 @@
 	"target": "directory",
 	"adapterName": "minecraft",
 	"description": "minecraft for adapter development",
-	"authorName": "Author",
-	"authorGithub": "Author",
-	"authorEmail": "author@mail.com",
+	"authorName": "Thomas Bruane",
+	"authorGithub": "ThomasBra",
+	"authorEmail": "t.braune@gmail.com",
 	"gitRemoteProtocol": "HTTPS",
 	"dependabot": "yes",
 	"license": "MIT License",
@@ -26,7 +26,7 @@
 	"adminReact": "no",
 	"tabReact": "no",
 	"language": "TypeScript",
-	"title": "minecraft (TypeScript)",
+	"title": "minecraft",
 	"tools": [
 		"ESLint",
 		"code coverage"

@@ -42,7 +42,7 @@
 			"zh-cn": "适配器开发模板"
 		},
 		"authors": [
-			"Author <t.braune@gmail.com>"
+			"Thomas Braune <t.braune@gmail.com>"
 		],
 		"keywords": [
 			"ioBroker",
@@ -55,8 +55,8 @@
 		"main": "build/main.js",
 		"icon": "minecraft.png",
 		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/Author/ioBroker.minecraft/main/admin/minecraft.png",
-		"readme": "https://github.com/Author/ioBroker.minecraft/blob/main/README.md",
+		"extIcon": "https://raw.githubusercontent.com/ThomasBra/ioBroker.minecraft/main/admin/minecraft.png",
+		"readme": "https://github.com/ThomasBra/ioBroker.minecraft/blob/main/README.md",
 		"loglevel": "info",
 		"mode": "daemon",
 		"type": "general",
