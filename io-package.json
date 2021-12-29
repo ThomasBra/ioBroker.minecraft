@@ -63,23 +63,6 @@
 		"compact": true,
 		"materialize": true,
 		"materializeTab": true,
-		"adminTab": {
-			"singleton": true,
-			"name": {
-				"en": "Minecraft",
-				"de": "Minecraft",
-				"ru": "Minecraft",
-				"pt": "Minecraft",
-				"nl": "Minecraft",
-				"fr": "Minecraft",
-				"it": "Minecraft",
-				"es": "Minecraft",
-				"pl": "Minecraft",
-				"zh-cn": "Minecraft"
-			},
-			"link": "",
-			"fa-icon": "info"
-		},
 		"supportCustoms": true,
 		"dependencies": [
 			{
