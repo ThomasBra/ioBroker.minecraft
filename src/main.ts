@@ -56,52 +56,61 @@ class minecraft extends utils.Adapter {
 				this.setStateAsync("players.max", { val: response.players?.max, ack: true });
 				this.setStateAsync("players.online", { val: response.players?.online, ack: true });
 				const samples: any[] = response.players?.sample;
-				const namesArray = samples?.map(sample => sample.name);
-				if (namesArray.length > 0) {
-					namesArray.forEach(name => {
-						const id = "players." + name.toString();
-						this.getObject(id, (err, obj) => {
-							if (err)
-								this.log.error(err.message);
-							if (!obj) {
-								this.setObjectNotExists(id, {
-									"type": "state",
-									"common": {
-										"name": name + " is online",
-										"role": "state",
-										"type": "boolean",
-										"read": true,
-										"write": false
-									},
-									native: {}
-								});
-							}
-						});
-					});
-				}
-				this.getState("players.names", (err, state) => {
-					const value: any = state?.val;
-					if (value) {
-						const oldNamesArray: [string] = JSON.parse(value);
-
-						oldNamesArray.filter(oldName => !namesArray.includes(oldName)).forEach(oldName => this.setStateAsync("players." + oldName, { val: false, ack: true }));
-						namesArray.filter(name => !oldNamesArray.includes(name)).forEach(name => this.setStateAsync("players." + name, { val: true, ack: true }));
-					}
-
-					let names = JSON.stringify(namesArray);
-					if (!names)
-						names = "[]";
-					this.setStateAsync("players.names", { val: names, ack: true });
-				});
+				const namesArray: string[] = samples?.map(sample => sample.name);
+				this.setPlayerNames(namesArray);
 				this.setStateAsync("version.name", { val: response.version?.name, ack: true });
 				this.setStateAsync("version.protocol", { val: response.version?.protocol, ack: true });
 				this.setStateAsync("info.online", { val: true, ack: true });
 			}).catch(err => {
 				this.setStateAsync("info.online", { val: false, ack: true });
+				this.setPlayerNames([]);
 				this.log.debug(err);
 			});
 		}
 		return "runing";
+	}
+
+	private setPlayerNames(namesArray: string[]) {
+		if (!namesArray)
+			namesArray = [];
+		if (namesArray.length > 0) {
+			namesArray.forEach(name => {
+				const id = "players." + name.toString();
+				this.getObject(id, (err, obj) => {
+					if (err)
+						this.log.error(err.message);
+					if (!obj) {
+						this.setObjectNotExists(id, {
+							"type": "state",
+							"common": {
+								"name": name + " is online",
+								"role": "state",
+								"type": "boolean",
+								"read": true,
+								"write": false
+							},
+							native: {}
+						});
+					}
+				});
+			});
+		}
+		this.getState("players.names", (err, state) => {
+			const value: any = state?.val;
+			let oldNamesArray: string[];
+			if (value)
+				oldNamesArray = JSON.parse(value);
+			else
+				oldNamesArray = [];
+
+			oldNamesArray.filter(oldName => !namesArray.includes(oldName)).forEach(oldName => this.setStateAsync("players." + oldName, { val: false, ack: true }));
+			namesArray.filter(name => !oldNamesArray.includes(name)).forEach(name => this.setStateAsync("players." + name, { val: true, ack: true }));
+
+			let names = JSON.stringify(namesArray);
+			if (!names)
+				names = "[]";
+			this.setStateAsync("players.names", { val: names, ack: true });
+		});
 	}
 
 	/**

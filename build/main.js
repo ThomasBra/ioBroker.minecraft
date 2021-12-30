@@ -70,49 +70,57 @@ class minecraft extends utils.Adapter {
                 this.setStateAsync("players.online", { val: (_d = response.players) === null || _d === void 0 ? void 0 : _d.online, ack: true });
                 const samples = (_e = response.players) === null || _e === void 0 ? void 0 : _e.sample;
                 const namesArray = samples === null || samples === void 0 ? void 0 : samples.map(sample => sample.name);
-                if (namesArray.length > 0) {
-                    namesArray.forEach(name => {
-                        const id = "players." + name.toString();
-                        this.getObject(id, (err, obj) => {
-                            if (err)
-                                this.log.error(err.message);
-                            if (!obj) {
-                                this.setObjectNotExists(id, {
-                                    "type": "state",
-                                    "common": {
-                                        "name": name + " is online",
-                                        "role": "state",
-                                        "type": "boolean",
-                                        "read": true,
-                                        "write": false
-                                    },
-                                    native: {}
-                                });
-                            }
-                        });
-                    });
-                }
-                this.getState("players.names", (err, state) => {
-                    const value = state === null || state === void 0 ? void 0 : state.val;
-                    if (value) {
-                        const oldNamesArray = JSON.parse(value);
-                        oldNamesArray.filter(oldName => !namesArray.includes(oldName)).forEach(oldName => this.setStateAsync("players." + oldName, { val: false, ack: true }));
-                        namesArray.filter(name => !oldNamesArray.includes(name)).forEach(name => this.setStateAsync("players." + name, { val: true, ack: true }));
-                    }
-                    let names = JSON.stringify(namesArray);
-                    if (!names)
-                        names = "[]";
-                    this.setStateAsync("players.names", { val: names, ack: true });
-                });
+                this.setPlayerNames(namesArray);
                 this.setStateAsync("version.name", { val: (_f = response.version) === null || _f === void 0 ? void 0 : _f.name, ack: true });
                 this.setStateAsync("version.protocol", { val: (_g = response.version) === null || _g === void 0 ? void 0 : _g.protocol, ack: true });
                 this.setStateAsync("info.online", { val: true, ack: true });
             }).catch(err => {
                 this.setStateAsync("info.online", { val: false, ack: true });
+                this.setPlayerNames([]);
                 this.log.debug(err);
             });
         }
         return "runing";
+    }
+    setPlayerNames(namesArray) {
+        if (!namesArray)
+            namesArray = [];
+        if (namesArray.length > 0) {
+            namesArray.forEach(name => {
+                const id = "players." + name.toString();
+                this.getObject(id, (err, obj) => {
+                    if (err)
+                        this.log.error(err.message);
+                    if (!obj) {
+                        this.setObjectNotExists(id, {
+                            "type": "state",
+                            "common": {
+                                "name": name + " is online",
+                                "role": "state",
+                                "type": "boolean",
+                                "read": true,
+                                "write": false
+                            },
+                            native: {}
+                        });
+                    }
+                });
+            });
+        }
+        this.getState("players.names", (err, state) => {
+            const value = state === null || state === void 0 ? void 0 : state.val;
+            let oldNamesArray;
+            if (value)
+                oldNamesArray = JSON.parse(value);
+            else
+                oldNamesArray = [];
+            oldNamesArray.filter(oldName => !namesArray.includes(oldName)).forEach(oldName => this.setStateAsync("players." + oldName, { val: false, ack: true }));
+            namesArray.filter(name => !oldNamesArray.includes(name)).forEach(name => this.setStateAsync("players." + name, { val: true, ack: true }));
+            let names = JSON.stringify(namesArray);
+            if (!names)
+                names = "[]";
+            this.setStateAsync("players.names", { val: names, ack: true });
+        });
     }
     /**
      * Is called when adapter shuts down - callback has to be called under any circumstances!
