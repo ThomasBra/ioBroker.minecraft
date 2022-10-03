@@ -209,7 +209,7 @@
 			"common": {
 				"name": "description",
 				"role": "state",
-				"type": "number",
+				"type": "string",
 				"read": true,
 				"write": false
 			},

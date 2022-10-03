@@ -73,7 +73,7 @@ class minecraft extends utils.Adapter {
 	private setPlayerNames(namesArray: string[]) {
 		if (!namesArray)
 			namesArray = [];
-		if (namesArray.length > 0) {
+		if (namesArray?.length > 0) {
 			namesArray.forEach(name => {
 				const id = "players." + name.toString();
 				this.getObject(id, (err, obj) => {
