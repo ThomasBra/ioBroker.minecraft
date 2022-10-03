@@ -26,10 +26,9 @@ Configure hostaddress (server:port) at the instance settings.
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 0.1.0 (2022-10-03)
 * (ThomasBra) small fixes
 * (ThomasBra) online players (if server allows) as online flag
-
 
 ### 0.0.2 (2021-12-20)
 * (ThomasBra) Open test phase - please give me feedback here as a issue
