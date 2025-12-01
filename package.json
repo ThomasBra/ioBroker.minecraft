@@ -19,7 +19,7 @@
     "url": "https://github.com/ThomasBra/ioBroker.minecraft"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.6.12",
+    "@iobroker/adapter-core": "^3.3.2",
     "minecraft-status": "^1.1.0"
   },
   "devDependencies": {
